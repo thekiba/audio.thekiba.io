@@ -12,8 +12,8 @@
             window.audio = {};
         }
 
-        window.audio.get_all_audio = function (callback) {
-            var data = {uid: 12};
+        window.audio.get_all_audio = function (id, callback) {
+            var data = {uid: id};
 
             VK.api('audio.get', data, function (result) {
                 if (result.response) {
@@ -53,7 +53,7 @@
 </body>
 <script type="text/javascript">
     VK.init(function () {
-        audio.get_all_audio(function (items) {
+        audio.get_all_audio(VK.id, function (items) {
             console.log(items);
         });
     });
