@@ -2,51 +2,16 @@
 <html>
 <head>
     <title></title>
-    <link rel="stylesheet" href="/src/bootstrap/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/src/bootstrap/css/bootstrap-responsive.min.css"/>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="./src/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="./src/bootstrap/css/bootstrap-responsive.min.css"/>
 
     <script src="http://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
 
-    <script type="text/javascript">
-        if (typeof window.audio == 'undefined') {
-            window.audio = {};
-        }
+    <script type="text/javascript" src="./src/audio.js">
 
-        window.audio.get_all_audio = function (id, callback) {
-            var data = {uid: id};
-
-            VK.api('audio.get', data, function (result) {
-                if (result.response) {
-                    if (typeof callback == 'function') {
-                        callback(result.response);
-                    }
-                }
-                console.log('error');
-                return false;
-            });
-        };
-
-        window.audio.sort_audio = function (items) {
-            for (var key in items) {
-                var value = items[key];
-            }
-        };
-
-        window.audio.clone = function (items) {
-            var items_clone = {};
-            return items_clone;
-        };
-
-        window.audio.reorder = function (reorders, callback) {
-            for (var key in reorders) {
-                var reorder = reorders[key];
-            }
-            if (typeof callback == 'function') {
-                callback();
-            }
-        }
     </script>
-    <script type="text/javascript" src="/src/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./src/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
 
@@ -54,7 +19,74 @@
 <script type="text/javascript">
     VK.init(function () {
         audio.get_all_audio(VK.id, function (items) {
-            console.log(items);
+            var items_clone = audio.clone(items);
+            audio.sort_audio(items, 'artist', 'title');
+
+            var count = 0;
+            var reorder = {};
+
+            for (var key in items_clone) {
+                var item = items_clone[key];
+                var item_sort = items[key];
+
+                if(item['aid'] == item_sort['aid'])
+                {
+                    continue;
+                }
+
+                var after_aid = 0;
+                var after_key;
+
+                for(after_key in items_clone)
+                {
+                    if(items_clone[after_key]['aid'] == item['aid'])
+                    {
+                        if(typeof items_clone[after_key-1] == 'undefined')
+                        {
+                            after_aid = 0;
+                        } else {
+                            after_aid = items_clone[after_key-1];
+                        }
+                    }
+                }
+
+                var items_temp = {};
+                var count_temp = 0;
+                if(after_aid == 0)
+                {
+                    items_temp[count_temp++] = item;
+                    for(var i = 1; i < items_clone.length; i++)
+                    {
+                        if(items_clone[i]['aid'] == item['aid'])
+                        {
+                            continue;
+                        }
+                        items_temp[count_temp++] = items_clone[i];
+                    }
+                } else {
+                    for(var i = 0; i < items_clone.length; i++)
+                    {
+                        if(items_clone[i]['aid'] == item['aid'])
+                        {
+                            continue;
+                        }
+                        items_temp[count_temp++] = items_clone[i];
+                        if(items_clone[i]['aid'] == after_aid)
+                        {
+                            items_temp[count_temp++] = item;
+                        }
+                    }
+                }
+
+                items_clone = items_temp;
+
+            }
+
+            audio.reorder(reorder, 0, count, function () {
+                console.log(reorder);
+                console.log('done');
+                document.write('Done!');
+            });
         });
     });
 </script>
