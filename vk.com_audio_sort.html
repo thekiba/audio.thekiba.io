@@ -7,15 +7,53 @@
 
     <script src="http://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
 
-    <script type="text/javascript" src="/src/audio.js"></script>
+    <script type="text/javascript">
+        if (typeof windows.audio == 'undefined') {
+            windows.audio = {};
+        }
+
+        windows.audio.get_all_audio = function (callback) {
+            var data = {uid: 12};
+
+            VK.api('audio.get', data, function (result) {
+                if (result.response) {
+                    if (typeof callback == 'function') {
+                        callback(result.response);
+                    }
+                }
+                console.log('error');
+                return false;
+            });
+        };
+
+        windows.audio.sort_audio = function (items) {
+            for (var key in items) {
+                var value = items[key];
+            }
+        };
+
+        windows.audio.clone = function (items) {
+            var items_clone = {};
+            return items_clone;
+        };
+
+        windows.audio.reorder = function (reorders, callback) {
+            for (var key in reorders) {
+                var reorder = reorders[key];
+            }
+            if (typeof callback == 'function') {
+                callback();
+            }
+        }
+    </script>
     <script type="text/javascript" src="/src/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
 
 </body>
 <script type="text/javascript">
-    VK.init(function() {
-        audio.get_all_audio(function(items){
+    VK.init(function () {
+        audio.get_all_audio(function (items) {
             console.log(items);
         });
     });
