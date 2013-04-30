@@ -33,7 +33,7 @@ window.audio.sort_audio = function (items, field_1, field_2) {
         }
         swapped = false;
         for (var i = 0; i + jump < items.length; i++) {
-            if (items[i][field_1] > items[i + jump][field_1]) // сторона сортировки
+            if (items[i][field_1] > items[i + jump][field_1]) // сторона сортировки, >
             {
                 var temp = items[i];
                 items[i] = items[i + jump];
@@ -230,6 +230,16 @@ window.audio.start_sort = function () {
             }
         }
 
+        if(reorder.length > items_sort.length)
+        {
+            reorder = [];
+
+            for(var i = 1; i < items_sort.length; i++)
+            {
+                reorder[reorder.length] = {aid: items_sort[i]['aid'], after: items_sort[i-1]['aid']};
+            }
+        }
+
 
 
         var execute = [];
@@ -246,8 +256,8 @@ window.audio.start_sort = function () {
                             window.audio.execute(execute, count, callback);
                         } else {
                             $('#order_count').html((execute.length - count)<0?0:(execute.length - count));
-                            //console.log(result);
-                            //console.log(execute[count]);
+                            console.log(result);
+                            console.log(execute[count]);
                             window.audio.execute(execute, ++count, callback);
                         }
                     });
