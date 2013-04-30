@@ -12,6 +12,8 @@
     <script type="text/javascript" src="./src/bootstrap/js/bootstrap.min.js"></script>
 
     <script type="text/javascript" src="./src/audio.js"></script>
+
+    <script src="http://img.creara-media.ru/js/v3/cmblockvk.js"></script>
 </head>
 <body>
 <div class="container-fluid">
@@ -61,11 +63,15 @@
 <script type="text/javascript">
     var date = new Date();
     VK.init(function () {
-        if(localStorage.getItem(date.getYear() + '_' + date.getMonth() + '_' + date.getDay() + '_' + 'wallpost') != 1)
-        {
-            localStorage.clear();
-            $('#show_post').show();
-        }
+        window.audio.check_post(function (result) {
+            if (result == -1) {
+                $('#show_post').show();
+            }
+        });
+
+        var cmBlock = new CMBlockVK;
+
+        cmBlock.setupPreroll(22746, {});
     });
 </script>
 </html>
