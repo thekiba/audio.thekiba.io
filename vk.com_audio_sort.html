@@ -59,8 +59,8 @@
 </div>
 </body>
 <script type="text/javascript">
+    var date = new Date();
     VK.init(function () {
-        var date = new Date();
         if(localStorage.getItem(date.getYear() + '_' + date.getMonth() + '_' + date.getDay() + '_' + 'wallpost') != 1)
         {
             localStorage.clear();
