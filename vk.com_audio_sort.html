@@ -36,7 +36,6 @@
                 <dt>Статус:</dt>
                 <dd id="order_status">...</dd>
             </dl>
-
             <hr>
         </div>
     </div>
@@ -67,81 +66,7 @@
         $('#show_post').show();
     }
     VK.init(function () {
-        window.audio.submit = function () {
-            if (localStorage.getItem(date.getYear() + '_' + date.getMonth() + '_' + date.getDay() + '_' + 'wallpost') == 1) {
-                window.audio.start_sort();
-            } else {
-                localStorage.clear();
-                VK.api('audio.get', {count: 3}, function(result){
-                    var attachments = '';
-                    if(typeof result['response'] != 'undefined'){
-                            if(typeof result['response'][0] != 'undefined') attachments += 'audio' + result['response'][0]['owner_id'] + '_' + result['response'][0]['aid'] + ',';
-                            if(typeof result['response'][1] != 'undefined') attachments += 'audio' + result['response'][1]['owner_id'] + '_' + result['response'][1]['aid'] + ',';
-                            if(typeof result['response'][2] != 'undefined') attachments += 'audio' + result['response'][2]['owner_id'] + '_' + result['response'][2]['aid'] + ',';
-                    }
-                    var data = {owner_id: VK.id, message: 'Я отсортировал свою музыку с помощью этого приложения. Попробуй и ты!', attachments: attachments+'photo167341624_302303341,http://vk.com/app3611826'};
-                    VK.api('wall.post', data, function (result) {
-                        if (typeof result['response'] == 'undefined') {
-                        } else {
-                            window.audio.start_sort();
-                        }
-                    });
-                });
-            }
-            return false;
-        }
 
-        window.audio.start_sort = function () {
-            $('#show_post').hide();
-            localStorage.setItem(date.getYear() + '_' + date.getMonth() + '_' + date.getDay() + '_' + 'wallpost', 1);
-            audio.get_all_audio(VK.id, function (items) {
-                var items_no_sort = audio.clone(items);
-                var items_sort = audio.clone(items);
-                audio.sort_audio(items_sort, 'artist', 'title');
-
-                var aids_items = {};
-
-                for (var key in items_sort) {
-                    aids_items[items_sort[key]['aid']] = items_sort[key];
-                }
-
-                var reorder = [];
-
-                for (var i = 0; i < items_no_sort.length; i++) {
-                    if (items_no_sort[i]['aid'] != items_sort[i]['aid']) {
-                        var after_aid = 0;
-                        var aid = items_no_sort[i]['aid'];
-
-                        for (var j = 0; j < items_sort.length; j++) {
-                            if (items_sort[j]['aid'] == items_no_sort[i]['aid']) {
-                                if (typeof items_sort[j - 1] == 'undefined') {
-                                    after_aid = 0;
-                                } else {
-                                    after_aid = items_sort[j - 1]['aid'];
-                                }
-                                break;
-                            }
-                        }
-
-                        var temp = items_no_sort[i];
-                        for (var j = i; j < items.length; j++) {
-                            items_no_sort[j] = items_no_sort[j + 1];
-                            if (items_no_sort[j + 1]['aid'] == after_aid) {
-                                items_no_sort[j + 1] = temp;
-                                break;
-                            }
-                        }
-
-                        reorder[reorder.length] = {aid: aid, after: after_aid};
-
-                        i--;
-                    }
-                }
-
-                audio.reorder(reorder, 0, aids_items, function () {
-                });
-            });
-        };
     });
 </script>
 </html>
