@@ -283,7 +283,7 @@ window.audio.start_sort = function () {
         var execute = [];
         var code_reorder = [];
 
-        window.audio.execute = function (execute, count, aids_items, callback) {
+        window.audio.execute = function (execute, count, callback) {
             if (count < execute.length) {
                 $('#order_status').html('Идет сортировка...');
                 setTimeout(function () {
@@ -316,7 +316,7 @@ window.audio.start_sort = function () {
             if (key != 0 && key % 25 == 0) {
                 var code_data = JSON.stringify(code_reorder);
                 execute[execute.length] = {code: 'var data = ' + code_data + '; var a = 0; while(a < ' + code_reorder.length + ') { API.audio.reorder(data[a]); a = a + 1; }; return a;'};
-                var code_reorder = [];
+                code_reorder = [];
             }
             code_reorder[code_reorder.length] = reorder[key];
         }
@@ -326,7 +326,7 @@ window.audio.start_sort = function () {
             execute[execute.length] = {code: 'var data = ' + code_data + '; var a = 0; while(a < ' + code_reorder.length + ') { API.audio.reorder(data[a]); a = a + 1; }; return a;'};
         }
 
-        window.audio.execute(execute, 0, aids_items, function () {
+        window.audio.execute(execute, 0, function () {
         });
     });
 };
