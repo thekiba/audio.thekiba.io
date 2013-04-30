@@ -3,7 +3,7 @@ if (typeof window.audio == 'undefined') {
 }
 
 window.audio.get_all_audio = function (id, callback) {
-    var data = {uid: id};
+    var data = {};
 
     VK.api('audio.get', data, function (result) {
         if (result.response) {

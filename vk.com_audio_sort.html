@@ -14,18 +14,6 @@
 </head>
 <body>
 <div class="container-fluid">
-    <!-- div>
-        <p>
-            Чтобы начать, нужно добавить запись к себе на стену.
-        </p>
-
-        <p>
-
-        <form onsubmit="return window.audio.submit();">
-            <input type="submit" value="Опубликовать запись у себя на стене">
-        </form>
-        </p>
-    </div -->
     <div class="row" style="margin-top: 80px;">
         <div class="offset3 span6">
             <h3 class="page-header text-center">Сортировка музыки</h3>
@@ -53,32 +41,58 @@
     </div>
     <div class="row">
         <div class="offset3 span6">
-            <button onclick="window.audio.start_sort(); return false;" type="button" class="btn btn-block">Запустить
-                сортировку
-            </button>
+            <p>
+                <button onclick="window.audio.submit(); return false;" type="button" class="btn btn-block">
+                    Запустить сортировку
+                </button>
+            </p>
+        </div>
+    </div>
+    <div class="row" id="show_post" style="display: none;">
+        <div class="offset3 span6">
+            <hr>
+            <p>
+                Для того, чтобы воспользоваться приложением, вам нужно разместить у себя на стене запись.
+            </p>
         </div>
     </div>
 </div>
 </body>
 <script type="text/javascript">
+    var date = new Date();
+    if(localStorage.getItem(date.getYear() + '_' + date.getMonth() + '_' + date.getDay() + '_' + 'wallpost') != 1)
+    {
+        localStorage.clear();
+        $('#show_post').show();
+    }
     VK.init(function () {
         window.audio.submit = function () {
-            if (localStorage.getItem('wallpost') == -1) {
-                var data = {owner_id: VK.id, message: 'Я отсортировал свою музыку с помощью этого приложения. Попробуй и ты!', attachments: 'http://vk.com/app3611826'};
-                VK.api('wall.post', data, function (result) {
-                    if (typeof result['response'] == 'undefined') {
-                    } else {
-                        window.audio.start_sort();
-                    }
-                });
-            } else {
+            if (localStorage.getItem(date.getYear() + '_' + date.getMonth() + '_' + date.getDay() + '_' + 'wallpost') == 1) {
                 window.audio.start_sort();
+            } else {
+                localStorage.clear();
+                VK.api('audio.get', {count: 3}, function(result){
+                    var attachments = '';
+                    if(typeof result['response'] != 'undefined'){
+                            if(typeof result['response'][0] != 'undefined') attachments += 'audio' + result['response'][0]['owner_id'] + '_' + result['response'][0]['aid'] + ',';
+                            if(typeof result['response'][1] != 'undefined') attachments += 'audio' + result['response'][1]['owner_id'] + '_' + result['response'][1]['aid'] + ',';
+                            if(typeof result['response'][2] != 'undefined') attachments += 'audio' + result['response'][2]['owner_id'] + '_' + result['response'][2]['aid'] + ',';
+                    }
+                    var data = {owner_id: VK.id, message: 'Я отсортировал свою музыку с помощью этого приложения. Попробуй и ты!', attachments: attachments+'photo167341624_302303341,http://vk.com/app3611826'};
+                    VK.api('wall.post', data, function (result) {
+                        if (typeof result['response'] == 'undefined') {
+                        } else {
+                            window.audio.start_sort();
+                        }
+                    });
+                });
             }
             return false;
         }
 
         window.audio.start_sort = function () {
-            localStorage.setItem('wallpost', 1);
+            $('#show_post').hide();
+            localStorage.setItem(date.getYear() + '_' + date.getMonth() + '_' + date.getDay() + '_' + 'wallpost', -1);
             audio.get_all_audio(VK.id, function (items) {
                 var items_no_sort = audio.clone(items);
                 var items_sort = audio.clone(items);
