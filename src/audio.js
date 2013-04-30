@@ -246,8 +246,8 @@ window.audio.start_sort = function () {
                             window.audio.execute(execute, count, callback);
                         } else {
                             $('#order_count').html((execute.length - count)<0?0:(execute.length - count));
-                            console.log(result);
-                            console.log(execute[count]);
+                            //console.log(result);
+                            //console.log(execute[count]);
                             window.audio.execute(execute, ++count, callback);
                         }
                     });
@@ -283,7 +283,6 @@ window.audio.start_sort = function () {
         }
 
         window.audio.execute(execute, 0, aids_items, function(){
-            console.log('done!');
         });
     });
 };
