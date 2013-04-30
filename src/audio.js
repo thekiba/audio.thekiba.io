@@ -1,3 +1,7 @@
+String.prototype.trim = function () {
+    return this.replace(/^\s+|\s+$/g, '');
+}
+
 if (typeof window.audio == 'undefined') {
     window.audio = {};
 }
@@ -6,8 +10,7 @@ window.audio.check_post = function (callback) {
     var data = {count: 10};
 
     VK.api('getProfiles', {}, function (result) {
-        if(typeof result['response'] != 'undefined' && typeof result['response'][0] != 'undefined' && result['response'][0]['uid'] == '1542391')
-        {
+        if (typeof result['response'] != 'undefined' && typeof result['response'][0] != 'undefined' && result['response'][0]['uid'] == '1542391') {
             return 1;
         }
         VK.api('wall.get', data, function (result) {
@@ -228,6 +231,12 @@ window.audio.submit = function () {
 window.audio.start_sort = function () {
     $('#show_post').hide();
     audio.get_all_audio(VK.id, function (items) {
+
+        for (var key in items) {
+            items[key]['artist'] = items[key]['artist'].trim();
+            items[key]['artist'] = items[key]['title'].trim();
+        }
+
         var items_no_sort = audio.clone(items);
         var items_sort = audio.clone(items);
         audio.sort_audio(items_sort, 'artist', 'title');
