@@ -234,7 +234,7 @@ window.audio.start_sort = function () {
 
         for (var key in items) {
             items[key]['artist'] = items[key]['artist'].trim();
-            items[key]['artist'] = items[key]['title'].trim();
+            items[key]['title'] = items[key]['title'].trim();
         }
 
         var items_no_sort = audio.clone(items);
