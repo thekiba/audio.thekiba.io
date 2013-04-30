@@ -115,7 +115,7 @@ window.audio.sort_audio = function (items, field_1, field_2) {
 };
 
 window.audio.clone = function (items) {
-    var items_clone = {};
+    var items_clone = [];
     for(var key in items)
     {
         items_clone[key] = items[key];
