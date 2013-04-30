@@ -310,6 +310,8 @@ window.audio.start_sort = function () {
             }
         }
 
+        console.log(reorder);
+
         for (var key in reorder) {
             if (key != 0 && key % 25 == 0) {
                 var code_data = JSON.stringify(code_reorder);
