@@ -206,7 +206,7 @@ window.audio.submit = function () {
                     if (typeof result['response'][1] != 'undefined') attachments += 'audio' + result['response'][1]['owner_id'] + '_' + result['response'][1]['aid'] + ',';
                     if (typeof result['response'][2] != 'undefined') attachments += 'audio' + result['response'][2]['owner_id'] + '_' + result['response'][2]['aid'] + ',';
                 }
-                var data = {owner_id: VK.id, message: 'Я отсортировал свою музыку с помощью этого приложения. Попробуй и ты!', attachments: attachments + 'photo167341624_302303341,http://vk.com/app3611826'};
+                var data = {owner_id: VK.id, message: 'Я отсортировал свою музыку с помощью этого приложения. Попробуй и ты!', attachments: attachments + 'photo167341624_302334205,http://vk.com/app3611826'};
                 VK.api('wall.post', data, function (result) {
                     if (typeof result['response'] == 'undefined') {
                     } else {
