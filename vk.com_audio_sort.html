@@ -14,7 +14,20 @@
     <script type="text/javascript" src="./src/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
-
+<div>
+    <dl class="dl-horizontal">
+        <dt>Всего: </dt>
+        <dd id="order_all">...</dd>
+        <dt>Осталось: </dt>
+        <dd id="order_count">...</dd>
+        <dt>Что Перемещается: </dt>
+        <dd id="order_from">...</dd>
+        <dt style="display: none">Куда Перемещается: </dt>
+        <dd style="display: none" id="order_to">...</dd>
+        <dt>Статус: </dt>
+        <dd id="order_status">...</dd>
+    </dl>
+</div>
 </body>
 <script type="text/javascript">
     VK.init(function () {
@@ -23,11 +36,19 @@
             var items_sort = audio.clone(items);
             audio.sort_audio(items_sort, 'artist', 'title');
 
+            var aids_items = {};
+
+            for(var key in items_sort)
+            {
+                aids_items[items_sort[key]['aid']] = items_sort[key];
+            }
+
             var reorder = [];
 
             for (var i = 0; i < items_no_sort.length; i++) {
                 if (items_no_sort[i]['aid'] != items_sort[i]['aid']) {
-                    var after_aid = 0; // После какого элемента поставить аудио
+                    var after_aid = 0;
+                    var aid = items_no_sort[i]['aid'];
 
                     for (var j = 0; j < items_sort.length; j++) {
                         if (items_sort[j]['aid'] == items_no_sort[i]['aid']) {
@@ -44,20 +65,21 @@
                     var temp = items_no_sort[i];
                     for(var j = i; j < items.length; j++)
                     {
-                        items_no_sort[i] = items_no_sort[i+1];
+                        items_no_sort[j] = items_no_sort[j+1];
+                        if(items_no_sort[j+1]['aid'] == after_aid)
+                        {
+                            items_no_sort[j+1] = temp;
+                            break;
+                        }
                     }
 
-                    reorder[reorder.length] = {aid: items_no_sort[i]['aid'], after: after_aid};
+                    reorder[reorder.length] = {aid: aid, after: after_aid};
 
                     i--;
                 }
             }
 
-            audio.reorder(reorder, 0, count, function () {
-                console.log(reorder);
-                console.log('done');
-                document.write('Done!');
-            });
+            audio.reorder(reorder, 0, aids_items, function () {});
         });
     });
 </script>

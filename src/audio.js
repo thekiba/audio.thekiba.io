@@ -123,19 +123,48 @@ window.audio.clone = function (items) {
     return items_clone;
 };
 
-window.audio.reorder = function (reorders, count, all, callback) {
+window.audio.reorder = function (reorders, count, aids_items, callback) {
+    if(typeof reorders[count] == 'undefined') {
+        if (typeof callback == 'function') {
+            $('#order_all').html(reorders.length);
+            $('#order_count').html(reorders.length);
+            $('#order_from').html('...');
+            $('#order_to').html('...');
+            $('#order_status').html('Список отсортирован!');
+            callback();
+        }
+        return true;
+    }
+    $('#order_all').html(reorders.length);
+    $('#order_count').html(count);
+    $('#order_from').html('<b>' + aids_items[reorders[count]['aid']]['artist'] + '</b> - ' + aids_items[reorders[count]['aid']]['title']);
+    $('#order_to').html('<b>' + aids_items[reorders[count]['after']]['artist'] + '</b> - ' + aids_items[reorders[count]['after']]['title']);
+    $('#order_status').html('Перемещается');
     setTimeout(function(){
-        VK.api('audio.reorder', reorders[count],function(){
+        VK.api('audio.reorder', reorders[count],function(result){
+            if(typeof result.response == 'undefined')
+            {
+                setTimeout(function(){
+                    audio.reorder(reorders, count, aids_items, callback);
+                }, 300);
+                return true;
+            }
+            $('order_status').html('Перемещено');
             count++;
-            if(count < all) {
-                audio.reorder(reorders, count, all, callback);
+            if(count < reorders.length) {
+                audio.reorder(reorders, count, aids_items, callback);
             } else {
+                $('#order_all').html(reorders.length);
+                $('#order_count').html(reorders.length);
+                $('#order_from').html('...');
+                $('#order_to').html('...');
+                $('#order_status').html('Список отсортирован!');
                 if (typeof callback == 'function') {
                     callback();
                 }
             }
         });
-    }, 500);
+    }, 100);
 }
 
 window.audio.show = function(items)
