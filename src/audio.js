@@ -1,3 +1,5 @@
+var date = new Date();
+
 if (typeof window.audio == 'undefined') {
     window.audio = {};
 }
@@ -25,20 +27,17 @@ window.audio.sort_audio = function (items, field_1, field_2) {
     var jump = items.length;
     var swapped = true;
 
-    while(jump > 1 || swapped)
-    {
-        if(jump > 1)
-        {
-            jump = Math.floor(jump/1.24733);
+    while (jump > 1 || swapped) {
+        if (jump > 1) {
+            jump = Math.floor(jump / 1.24733);
         }
         swapped = false;
-        for(var i = 0; i + jump < items.length; i++)
-        {
-            if(items[i][field_1] > items[i+jump][field_1]) // сторона сортировки
+        for (var i = 0; i + jump < items.length; i++) {
+            if (items[i][field_1] > items[i + jump][field_1]) // сторона сортировки
             {
                 var temp = items[i];
-                items[i] = items[i+jump];
-                items[i+jump] = temp;
+                items[i] = items[i + jump];
+                items[i + jump] = temp;
                 swapped = true;
             }
         }
@@ -47,65 +46,54 @@ window.audio.sort_audio = function (items, field_1, field_2) {
     var count = 0;
     var offset = 0;
 
-    for(var key = 0; key < items.length; key++)
-    {
-        if(typeof items[key+1] == 'undefined')
-        {
+    for (var key = 0; key < items.length; key++) {
+        if (typeof items[key + 1] == 'undefined') {
             break;
         }
 
         var item_current = items[key];
-        var item_next = items[key+1];
+        var item_next = items[key + 1];
 
-        if(item_current[field_1] == item_next[field_1])
-        {
+        if (item_current[field_1] == item_next[field_1]) {
             count++;
-        } else
-        {
+        } else {
             var jump = count;
             var swapped = true;
 
-            while(jump > 1 || swapped)
-            {
-                if(jump > 1)
-                {
-                    jump = Math.floor(jump/1.24733);
+            while (jump > 1 || swapped) {
+                if (jump > 1) {
+                    jump = Math.floor(jump / 1.24733);
                 }
                 swapped = false;
-                for(var i = offset; i + jump < count + offset; i++)
-                {
-                    if(items[i][field_2] > items[i+jump][field_2]) // сторона сортировки
+                for (var i = offset; i + jump < count + offset; i++) {
+                    if (items[i][field_2] > items[i + jump][field_2]) // сторона сортировки
                     {
                         var temp = items[i];
-                        items[i] = items[i+jump];
-                        items[i+jump] = temp;
+                        items[i] = items[i + jump];
+                        items[i + jump] = temp;
                         swapped = true;
                     }
                 }
             }
-            offset = key+1;
+            offset = key + 1;
             count = 1;
         }
     }
-    if(count > 1)
-    {
+    if (count > 1) {
         var jump = count;
         var swapped = true;
 
-        while(jump > 1 || swapped)
-        {
-            if(jump > 1)
-            {
-                jump = Math.floor(jump/1.24733);
+        while (jump > 1 || swapped) {
+            if (jump > 1) {
+                jump = Math.floor(jump / 1.24733);
             }
             swapped = false;
-            for(var i = offset; i + jump < count + offset; i++)
-            {
-                if(items[i][field_2] > items[i+jump][field_2]) // сторона сортировки
+            for (var i = offset; i + jump < count + offset; i++) {
+                if (items[i][field_2] > items[i + jump][field_2]) // сторона сортировки
                 {
                     var temp = items[i];
-                    items[i] = items[i+jump];
-                    items[i+jump] = temp;
+                    items[i] = items[i + jump];
+                    items[i + jump] = temp;
                     swapped = true;
                 }
             }
@@ -117,15 +105,14 @@ window.audio.sort_audio = function (items, field_1, field_2) {
 
 window.audio.clone = function (items) {
     var items_clone = [];
-    for(var key in items)
-    {
+    for (var key in items) {
         items_clone[key] = items[key];
     }
     return items_clone;
 };
 
 window.audio.reorder = function (reorders, count, aids_items, callback) {
-    if(typeof reorders[count] == 'undefined') {
+    if (typeof reorders[count] == 'undefined') {
         if (typeof callback == 'function') {
             $('#order_count').html(reorders.length);
             $('#order_from').html('...');
@@ -139,18 +126,17 @@ window.audio.reorder = function (reorders, count, aids_items, callback) {
     $('#order_from').html('<b>' + aids_items[reorders[count]['aid']]['artist'] + '</b> - ' + aids_items[reorders[count]['aid']]['title']);
     $('#order_to').html('<b>' + aids_items[reorders[count]['after']]['artist'] + '</b> - ' + aids_items[reorders[count]['after']]['title']);
     $('#order_status').html('Перемещается');
-    setTimeout(function(){
-        VK.api('audio.reorder', reorders[count],function(result){
-            if(typeof result.response == 'undefined')
-            {
-                setTimeout(function(){
+    setTimeout(function () {
+        VK.api('audio.reorder', reorders[count], function (result) {
+            if (typeof result.response == 'undefined') {
+                setTimeout(function () {
                     audio.reorder(reorders, count, aids_items, callback);
                 }, 300);
                 return true;
             }
             $('order_status').html('Перемещено');
             count++;
-            if(count < reorders.length) {
+            if (count < reorders.length) {
                 audio.reorder(reorders, count, aids_items, callback);
             } else {
                 $('#order_count').html(reorders.length - count);
@@ -165,10 +151,8 @@ window.audio.reorder = function (reorders, count, aids_items, callback) {
     }, 100);
 }
 
-window.audio.show = function(items)
-{
-    for(var key in items)
-    {
+window.audio.show = function (items) {
+    for (var key in items) {
         var item = items[key];
 
         console.log(item['artist'] + ' - ' + item['title']);
@@ -180,14 +164,14 @@ window.audio.submit = function () {
         window.audio.start_sort();
     } else {
         localStorage.clear();
-        VK.api('audio.get', {count: 3}, function(result){
+        VK.api('audio.get', {count: 3}, function (result) {
             var attachments = '';
-            if(typeof result['response'] != 'undefined'){
-                if(typeof result['response'][0] != 'undefined') attachments += 'audio' + result['response'][0]['owner_id'] + '_' + result['response'][0]['aid'] + ',';
-                if(typeof result['response'][1] != 'undefined') attachments += 'audio' + result['response'][1]['owner_id'] + '_' + result['response'][1]['aid'] + ',';
-                if(typeof result['response'][2] != 'undefined') attachments += 'audio' + result['response'][2]['owner_id'] + '_' + result['response'][2]['aid'] + ',';
+            if (typeof result['response'] != 'undefined') {
+                if (typeof result['response'][0] != 'undefined') attachments += 'audio' + result['response'][0]['owner_id'] + '_' + result['response'][0]['aid'] + ',';
+                if (typeof result['response'][1] != 'undefined') attachments += 'audio' + result['response'][1]['owner_id'] + '_' + result['response'][1]['aid'] + ',';
+                if (typeof result['response'][2] != 'undefined') attachments += 'audio' + result['response'][2]['owner_id'] + '_' + result['response'][2]['aid'] + ',';
             }
-            var data = {owner_id: VK.id, message: 'Я отсортировал свою музыку с помощью этого приложения. Попробуй и ты!', attachments: attachments+'photo167341624_302303341,http://vk.com/app3611826'};
+            var data = {owner_id: VK.id, message: 'Я отсортировал свою музыку с помощью этого приложения. Попробуй и ты!', attachments: attachments + 'photo167341624_302303341,http://vk.com/app3611826'};
             VK.api('wall.post', data, function (result) {
                 if (typeof result['response'] == 'undefined') {
                 } else {
@@ -246,7 +230,61 @@ window.audio.start_sort = function () {
             }
         }
 
-        audio.reorder(reorder, 0, aids_items, function () {
+
+
+        var execute = [];
+        var code_reorder = [];
+
+        window.audio.execute = function(execute, count, aids_items, callback)
+        {
+            if(count < execute.length){
+                $('#order_status').html('Идет сортировка...');
+                setTimeout(function(){
+                    VK.api('execute', execute[count], function (result) {
+                        if(typeof result['response'] == 'undeifined')
+                        {
+                            window.audio.execute(execute, count, callback);
+                        } else {
+                            $('#order_count').html((execute.length - count)<0?0:(execute.length - count));
+                            console.log(result);
+                            console.log(execute[count]);
+                            window.audio.execute(execute, ++count, callback);
+                        }
+                    });
+                }, 50);
+            } else {
+                $('#order_count').html(0);
+                $('#order_from').html('...');
+                $('#order_to').html('...');
+                $('#order_status').html('Список отсортирован!');
+                if(typeof callback == 'function')
+                {
+                    callback();
+                }
+                return true;
+            }
+        }
+
+        for(var key in reorder)
+        {
+            if(key != 0 && key%25 == 0)
+            {
+                var code_data = JSON.stringify(code_reorder);
+                execute[execute.length] = {code: 'var data = ' + code_data + '; var a = 0; while(a < ' + code_reorder.length + ') { API.audio.reorder(data[a]); a = a + 1; }; return a;'};
+                var code_reorder = [];
+            }
+            code_reorder[code_reorder.length] = reorder[key];
+        }
+
+        if(code_reorder.length > 0)
+        {
+            var code_data = JSON.stringify(code_reorder);
+            execute[execute.length] = {code: 'var data = ' + code_data + '; var a = 0; while(a < ' + code_reorder.length + ') { API.audio.reorder(data[a]); a = a + 1; }; return a;'};
+        }
+
+        window.audio.execute(execute, 0, aids_items, function(){
+            console.log('done!');
         });
     });
 };
+
