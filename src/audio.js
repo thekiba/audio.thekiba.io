@@ -7,12 +7,13 @@ window.audio.get_all_audio = function (id, callback) {
 
     VK.api('audio.get', data, function (result) {
         if (result.response) {
+            $('#order_all').html(result.response.length);
             if (typeof callback == 'function') {
                 callback(result.response);
                 return true;
             }
             else {
-                callback(result);
+                return result;
                 return false;
             }
         }
@@ -126,7 +127,6 @@ window.audio.clone = function (items) {
 window.audio.reorder = function (reorders, count, aids_items, callback) {
     if(typeof reorders[count] == 'undefined') {
         if (typeof callback == 'function') {
-            $('#order_all').html(reorders.length);
             $('#order_count').html(reorders.length);
             $('#order_from').html('...');
             $('#order_to').html('...');
@@ -135,8 +135,7 @@ window.audio.reorder = function (reorders, count, aids_items, callback) {
         }
         return true;
     }
-    $('#order_all').html(reorders.length);
-    $('#order_count').html(count);
+    $('#order_count').html(reorders.length - count);
     $('#order_from').html('<b>' + aids_items[reorders[count]['aid']]['artist'] + '</b> - ' + aids_items[reorders[count]['aid']]['title']);
     $('#order_to').html('<b>' + aids_items[reorders[count]['after']]['artist'] + '</b> - ' + aids_items[reorders[count]['after']]['title']);
     $('#order_status').html('Перемещается');
@@ -154,8 +153,7 @@ window.audio.reorder = function (reorders, count, aids_items, callback) {
             if(count < reorders.length) {
                 audio.reorder(reorders, count, aids_items, callback);
             } else {
-                $('#order_all').html(reorders.length);
-                $('#order_count').html(reorders.length);
+                $('#order_count').html(reorders.length - count);
                 $('#order_from').html('...');
                 $('#order_to').html('...');
                 $('#order_status').html('Список отсортирован!');

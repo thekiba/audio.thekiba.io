@@ -2,85 +2,131 @@
 <html>
 <head>
     <title></title>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-    <link rel="stylesheet" href="./src/bootstrap/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="./src/bootstrap/css/bootstrap-responsive.min.css"/>
+    <link rel="stylesheet" href="./src/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="./src/bootstrap/css/bootstrap-responsive.css"/>
 
     <script src="http://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
 
-    <script type="text/javascript" src="./src/audio.js">
-
-    </script>
+    <script src="./src/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="./src/bootstrap/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="./src/audio.js"></script>
 </head>
 <body>
-<div>
-    <dl class="dl-horizontal">
-        <dt>Всего: </dt>
-        <dd id="order_all">...</dd>
-        <dt>Осталось: </dt>
-        <dd id="order_count">...</dd>
-        <dt>Что Перемещается: </dt>
-        <dd id="order_from">...</dd>
-        <dt style="display: none">Куда Перемещается: </dt>
-        <dd style="display: none" id="order_to">...</dd>
-        <dt>Статус: </dt>
-        <dd id="order_status">...</dd>
-    </dl>
+<div class="container-fluid">
+    <!-- div>
+        <p>
+            Чтобы начать, нужно добавить запись к себе на стену.
+        </p>
+
+        <p>
+
+        <form onsubmit="return window.audio.submit();">
+            <input type="submit" value="Опубликовать запись у себя на стене">
+        </form>
+        </p>
+    </div -->
+    <div class="row" style="margin-top: 80px;">
+        <div class="offset3 span6">
+            <h3 class="page-header text-center">Сортировка музыки</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="offset3 span6">
+            <dl class="dl-horizontal form-horizontal text-center">
+                <dt>Песен в списке:</dt>
+                <dd id="order_all">...</dd>
+                <dt style="text-overflow: ellipsis;">Перемещается:</dt>
+                <dd id="order_from">...</dd>
+                <dt>Осталось:</dt>
+                <dd id="order_count">...</dd>
+                <dt style="display: none">Куда Перемещается:</dt>
+                <dd style="display: none" id="order_to">...</dd>
+            </dl>
+            <dl class="dl-horizontal form-horizontal text-center">
+                <dt>Статус:</dt>
+                <dd id="order_status">...</dd>
+            </dl>
+
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        <div class="offset3 span6">
+            <button onclick="window.audio.start_sort(); return false;" type="button" class="btn btn-block">Запустить
+                сортировку
+            </button>
+        </div>
+    </div>
 </div>
 </body>
 <script type="text/javascript">
     VK.init(function () {
-        audio.get_all_audio(VK.id, function (items) {
-            var items_no_sort = audio.clone(items);
-            var items_sort = audio.clone(items);
-            audio.sort_audio(items_sort, 'artist', 'title');
-
-            var aids_items = {};
-
-            for(var key in items_sort)
-            {
-                aids_items[items_sort[key]['aid']] = items_sort[key];
+        window.audio.submit = function () {
+            if (localStorage.getItem('wallpost') == -1) {
+                var data = {owner_id: VK.id, message: 'Я отсортировал свою музыку с помощью этого приложения. Попробуй и ты!', attachments: 'http://vk.com/app3611826'};
+                VK.api('wall.post', data, function (result) {
+                    if (typeof result['response'] == 'undefined') {
+                    } else {
+                        window.audio.start_sort();
+                    }
+                });
+            } else {
+                window.audio.start_sort();
             }
+            return false;
+        }
 
-            var reorder = [];
+        window.audio.start_sort = function () {
+            localStorage.setItem('wallpost', 1);
+            audio.get_all_audio(VK.id, function (items) {
+                var items_no_sort = audio.clone(items);
+                var items_sort = audio.clone(items);
+                audio.sort_audio(items_sort, 'artist', 'title');
 
-            for (var i = 0; i < items_no_sort.length; i++) {
-                if (items_no_sort[i]['aid'] != items_sort[i]['aid']) {
-                    var after_aid = 0;
-                    var aid = items_no_sort[i]['aid'];
+                var aids_items = {};
 
-                    for (var j = 0; j < items_sort.length; j++) {
-                        if (items_sort[j]['aid'] == items_no_sort[i]['aid']) {
-                            if(typeof items_sort[j-1] == 'undefined')
-                            {
-                                after_aid = 0;
-                            } else {
-                                after_aid = items_sort[j-1]['aid'];
-                            }
-                            break;
-                        }
-                    }
-
-                    var temp = items_no_sort[i];
-                    for(var j = i; j < items.length; j++)
-                    {
-                        items_no_sort[j] = items_no_sort[j+1];
-                        if(items_no_sort[j+1]['aid'] == after_aid)
-                        {
-                            items_no_sort[j+1] = temp;
-                            break;
-                        }
-                    }
-
-                    reorder[reorder.length] = {aid: aid, after: after_aid};
-
-                    i--;
+                for (var key in items_sort) {
+                    aids_items[items_sort[key]['aid']] = items_sort[key];
                 }
-            }
 
-            audio.reorder(reorder, 0, aids_items, function () {});
-        });
+                var reorder = [];
+
+                for (var i = 0; i < items_no_sort.length; i++) {
+                    if (items_no_sort[i]['aid'] != items_sort[i]['aid']) {
+                        var after_aid = 0;
+                        var aid = items_no_sort[i]['aid'];
+
+                        for (var j = 0; j < items_sort.length; j++) {
+                            if (items_sort[j]['aid'] == items_no_sort[i]['aid']) {
+                                if (typeof items_sort[j - 1] == 'undefined') {
+                                    after_aid = 0;
+                                } else {
+                                    after_aid = items_sort[j - 1]['aid'];
+                                }
+                                break;
+                            }
+                        }
+
+                        var temp = items_no_sort[i];
+                        for (var j = i; j < items.length; j++) {
+                            items_no_sort[j] = items_no_sort[j + 1];
+                            if (items_no_sort[j + 1]['aid'] == after_aid) {
+                                items_no_sort[j + 1] = temp;
+                                break;
+                            }
+                        }
+
+                        reorder[reorder.length] = {aid: aid, after: after_aid};
+
+                        i--;
+                    }
+                }
+
+                audio.reorder(reorder, 0, aids_items, function () {
+                });
+            });
+        };
     });
 </script>
 </html>
