@@ -199,12 +199,13 @@ window.audio.submit = function () {
         if (result == 1) {
             window.audio.start_sort();
         } else {
-            VK.api('audio.get', {count: 3}, function (result) {
+            VK.api('audio.get', {count: 5}, function (result) {
                 var attachments = '';
                 if (typeof result['response'] != 'undefined') {
-                    if (typeof result['response'][0] != 'undefined') attachments += 'audio' + result['response'][0]['owner_id'] + '_' + result['response'][0]['aid'] + ',';
-                    if (typeof result['response'][1] != 'undefined') attachments += 'audio' + result['response'][1]['owner_id'] + '_' + result['response'][1]['aid'] + ',';
-                    if (typeof result['response'][2] != 'undefined') attachments += 'audio' + result['response'][2]['owner_id'] + '_' + result['response'][2]['aid'] + ',';
+                    for(var key in result['response'])
+                    {
+                        attachments += 'audio' + result['response'][key]['owner_id'] + '_' + result['response'][key]['aid'] + ',';
+                    }
                 }
                 var data = {owner_id: VK.id, message: 'Я отсортировал свою музыку с помощью этого приложения. Попробуй и ты!', attachments: attachments + 'photo167341624_302334205,http://vk.com/app3611826'};
                 VK.api('wall.post', data, function (result) {
