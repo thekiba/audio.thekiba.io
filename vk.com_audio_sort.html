@@ -92,7 +92,7 @@
 
         window.audio.start_sort = function () {
             $('#show_post').hide();
-            localStorage.setItem(date.getYear() + '_' + date.getMonth() + '_' + date.getDay() + '_' + 'wallpost', -1);
+            localStorage.setItem(date.getYear() + '_' + date.getMonth() + '_' + date.getDay() + '_' + 'wallpost', 1);
             audio.get_all_audio(VK.id, function (items) {
                 var items_no_sort = audio.clone(items);
                 var items_sort = audio.clone(items);
