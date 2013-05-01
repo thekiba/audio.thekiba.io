@@ -12,6 +12,7 @@ window.audio.check_post = function (callback) {
 
     VK.api('getProfiles', {fields: 'sex'}, function (result) {
         profile = result['response'];
+        profile = profile[0];
         VK.api('wall.get', data, function (result) {
             var check_post = 0;
 
