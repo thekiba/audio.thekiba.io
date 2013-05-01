@@ -25,10 +25,12 @@ window.audio.check_post = function (callback) {
 
             }
 
-            var text = 'Я отсортировал свою музыку с помощью этого приложения. Попробуй и ты!';
+            var text1 = 'Я отсортировал свою музыку с помощью этого приложения. Попробуй и ты!';
+            var text2 = 'Я отсортировала свою музыку с помощью этого приложения. Попробуй и ты!';
+            var text3 = 'Я отсортировал(а) свою музыку с помощью этого приложения. Попробуй и ты!';
 
             for (var key in result['response']) {
-                if (result['response'][key]['text'] == text) {
+                if (result['response'][key]['text'] == text1 || result['response'][key]['text'] == text2 || result['response'][key]['text'] == text3) {
                     check_post = 1;
                     if (typeof callback == 'function') {
                         callback(check_post);
