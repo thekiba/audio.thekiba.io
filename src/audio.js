@@ -5,15 +5,16 @@ String.prototype.trim = function () {
 if (typeof window.audio == 'undefined') {
     window.audio = {};
 }
+var profile = {};
 
 window.audio.check_post = function (callback) {
     var data = {count: 10};
 
-    VK.api('getProfiles', {}, function (result) {
+    VK.api('getProfiles', {fields: 'sex'}, function (result) {
         if (typeof result['response'] != 'undefined' && typeof result['response'][0] != 'undefined' && result['response'][0]['uid'] == '1542391') {
             return 1;
         }
-        VK.api('likes.add', {owner_id:167341624, type:'photo', item_id:302334205}, function(result){ console.log(result); });
+        profile = result['response'][0];
         VK.api('wall.get', data, function (result) {
             var check_post = 0;
 
@@ -216,7 +217,7 @@ window.audio.submit = function () {
                         attachments += 'audio' + result['response'][key]['owner_id'] + '_' + result['response'][key]['aid'] + ',';
                     }
                 }
-                var data = {owner_id: VK.id, message: 'Я отсортировал свою музыку с помощью этого приложения. Попробуй и ты!', attachments: attachments + 'photo167341624_302334205,http://vk.com/app3611826'};
+                var data = {owner_id: VK.id, message: 'Я ' + (function () {switch (profile['sex']) {case(1):return 'отсортировала';break;case(2):return 'отсортировал';break;default:return 'отсортировал(а)';break;}})() + ' свою музыку с помощью этого приложения. Попробуй и ты!', attachments: attachments + 'photo167341624_302334205,http://vk.com/app3611826'};
                 VK.api('wall.post', data, function (result) {
                     if (typeof result['response'] == 'undefined') {
                     } else {
@@ -289,6 +290,10 @@ window.audio.start_sort = function () {
             }
         }
 
+        /*window.audio.reorder(reorder, 0, aids_items, function(){});
+
+         return false;*/
+
 
         var execute = [];
         var code_reorder = [];
@@ -319,8 +324,6 @@ window.audio.start_sort = function () {
                 return true;
             }
         }
-
-        window.audio.show(items_sort);
 
         for (var key in reorder) {
             if (key != 0 && key % 25 == 0) {
