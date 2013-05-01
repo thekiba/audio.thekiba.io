@@ -11,10 +11,7 @@ window.audio.check_post = function (callback) {
     var data = {count: 10};
 
     VK.api('getProfiles', {fields: 'sex'}, function (result) {
-        if (typeof result['response'] != 'undefined' && typeof result['response'][0] != 'undefined' && result['response'][0]['uid'] == '1') {
-            return 1;
-        }
-        profile = result['response'][0];
+        profile = result['response'];
         VK.api('wall.get', data, function (result) {
             var check_post = 0;
 
