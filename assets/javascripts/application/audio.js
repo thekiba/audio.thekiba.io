@@ -231,7 +231,6 @@ window.audio.submit = function () {
 }
 
 window.audio.start_sort = function () {
-    $('#show_post').hide();
     audio.get_all_audio(VK.id, function (items) {
 
         for (var key in items) {

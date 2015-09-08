@@ -9687,7 +9687,7 @@ body {
 
 body {
   font-weight: 400;
-  padding-top: 65px;
+  /*padding-top: 65px;*/
   padding-bottom: 110px;
   -webkit-animation-name: fadeIn;
   animation-name: fadeIn;

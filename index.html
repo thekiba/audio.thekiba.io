@@ -3,6 +3,7 @@
 <head>
     <title></title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=1000px, initial-scale=1">
 
     <link rel="stylesheet" href="/assets/stylesheets/vendors/fullcalendar.css">
     <link rel="stylesheet" href="/assets/stylesheets/vendors/animate.min.css">
@@ -34,7 +35,7 @@
     <script type="text/javascript" src="/assets/javascripts/theme/charts.js"></script>
     <script type="text/javascript" src="/assets/javascripts/theme/functions.js"></script>
 
-    <script src="http://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
+    <script src="https://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
     <script type="text/javascript" src="/assets/javascripts/application/audio.js"></script>
 </head>
 <body>
@@ -42,43 +43,35 @@
         <section id="main">        
             <section id="content">
 
-                <div class="container invoice">
+                <div class="container-fluid invoice">
                     
                     <div class="card">
                         <div class="card-header ch-alt text-center">
-                            <img id="profile_image" class="i-logo" alt="">
+                            <p id="order_status"></p>
+                            <!-- <img id="profile_image" class="i-logo" alt=""> -->
                         </div>
                         
-                        <div class="card-body card-padding">
+                        <div class="card-body card-padding" style="overflow-y: auto; max-height: 470px">
                             
                             <div class="clearfix"></div>
-                            
-                            <div class="row m-t-25 p-0 m-b-25">
-                                <div class="col-xs-offset-4 col-xs-4">
-                                    <button class="btn bgm-deeporange waves-effect brd-2 p-30 col-xs-12" onclick="window.audio.submit()">Запустить сортировку</button>
-                                </div>
-                            </div>
                             
                             <div class="row m-t-25 p-0 m-b-25">
                                 <div class="col-xs-4">
                                     <div class="bgm-gray brd-2 p-15">
                                         <div class="c-white m-b-5">Количество аудиозаписей</div>
-                                        <h2 id="order_all" class="m-0 c-white f-300"></h2>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-xs-4">
-                                    <div class="bgm-gray brd-2 p-15">
-                                        <div class="c-white m-b-5">Общее колличество операций</div>
-                                        <h2 id="order_from" class="m-0 c-white f-300"></h2>
+                                        <h2 id="order_all" class="m-0 c-white f-300">-</h2>
                                     </div>
                                 </div>
                                 
                                 <div class="col-xs-4">
                                     <div class="bgm-gray brd-2 p-15">
                                         <div class="c-white m-b-5">Осталось операций</div>
-                                        <h2 id="order_to" class="m-0 c-white f-300"></h2>
+                                        <h2 id="order_count" class="m-0 c-white f-300">-</h2>
                                     </div>
+                                </div>
+
+                                <div class="col-xs-4">
+                                    <button class="btn bgm-deeporange waves-effect brd-2 p-30 col-xs-12" onclick="window.audio.submit()">Запустить сортировку</button>
                                 </div>
                             </div>
 
@@ -87,7 +80,7 @@
                                     <h2>Неотсортированный список</h2>
                                 </div>
                                 <div class="col-xs-6">
-                                    <h2>Отсортированный список
+                                    <h2>Упорядоченный список
                                         <button class="btn bgm-deeporange waves-effect brd-2 p-15" onclick="window.audio.submit()">Применить</button></h2>
                                 </div>
                             </div>
@@ -101,17 +94,7 @@
                                         </thead>
                                         
                                         <tbody>
-                                            <thead>
-
-                                                <tr>
-                                                    <td>
-                                                        <h5 class="t-uppercase f-400">Исполнитель</h5>
-                                                        <p class="text-muted">Название</p>
-                                                    </td>
-                                                    <td class="highlight">1</td>
-                                                </tr>
-
-                                            </thead> 
+                                            <thead id="items_container"></thead> 
                                         </tbody>
                                     </table>
                                 </div>
@@ -123,17 +106,7 @@
                                         </thead>
                                         
                                         <tbody>
-                                            <thead>  
-
-                                                <tr>
-                                                    <td>
-                                                        <h5 class="t-uppercase f-400">Исполнитель</h5>
-                                                        <p class="text-muted">Название</p>
-                                                    </td>
-                                                    <td class="highlight">1</td>
-                                                </tr>
-
-                                            </thead> 
+                                            <thead id="items_sort_container"></thead> 
                                         </tbody>
                                     </table>
                                 </div>
@@ -154,49 +127,34 @@
 
             </section>
         </section>
-<!-- <div class="container-fluid">
-    <div class="row" style="margin-top: 80px;">
-        <div class="offset3 span6">
-            <h3 class="page-header text-center">Сортировка музыки</h3>
-        </div>
-    </div>
-    <div class="row">
-        <div class="offset3 span6">
-            <dl class="dl-horizontal form-horizontal text-center">
-                <dt>Песен в списке:</dt>
-                <dd id="order_all">...</dd>
-                <dt style="display: none; text-overflow: ellipsis;">Перемещается:</dt>
-                <dd style="display: none" id="order_from">...</dd>
-                <dt>Осталось перемещений:</dt>
-                <dd id="order_count">...</dd>
-                <dt style="display: none">Куда Перемещается:</dt>
-                <dd style="display: none" id="order_to">...</dd>
-            </dl>
-            <dl class="dl-horizontal form-horizontal text-center">
-                <dt>Статус:</dt>
-                <dd id="order_status">...</dd>
-            </dl>
-            <hr>
-        </div>
-    </div>
-    <div class="row">
-        <div class="offset3 span6">
-            <p>
-                <button onclick="window.audio.submit(); return false;" type="button" class="btn btn-block">
-                    Запустить сортировку
-                </button>
-            </p>
-        </div>
-    </div>
-    <div class="row" id="show_post" style="display: none;">
-        <div class="offset3 span6">
-            <hr>
-            <small>
-                Мы предоставляем доступ к нашему приложению бесплатно. Помогите нам набрать пользователей.
-                Пожалуйста, разместите у себя на стенке небольшую рекламу нашего приложения, это ведь не так много.
-            </small>
-        </div>
-    </div>
-</div> -->
+    <script type="text/javascript">
+        $(function () {
+            function render (id, item) {
+
+                return "<tr><td><h5 class='t-uppercase f-400'>" + item.title + "</h5><p class='text-muted'>" + item.artist + "</p></td><td class='highlight'>" + id + "</td></tr>";
+            };
+
+            window.audio.get_all_audio(1, function (items) {
+                var items_container = $('#items_container');
+                var items_sort_container = $('#items_sort_container'); 
+
+                for (var i in items) {
+                    var item = items[i];
+                    var html = render(Number(i) + 1, item);
+
+                    items_container.append(html);
+                };
+
+                audio.sort_audio(items, 'artist', 'title');
+
+                for (var i in items) {
+                    var item = items[i];
+                    var html = render(Number(i) + 1, item);
+
+                    items_sort_container.append(html);
+                };
+            });
+        });
+    </script>
 </body>
 </html>
