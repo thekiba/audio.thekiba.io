@@ -1,0 +1,12 @@
+/**
+ *= require vendors/fullcalendar.css
+ *= require vendors/animate.min.css
+ *= require vendors/sweet-alert.min.css
+ *= require vendors/material-design-iconic-font.min.css
+ *= require vendors/socicon.min.css
+
+ *= require theme/app.min.1.css
+ *= require theme/app.min.2.css
+
+ *= require_tree ./application
+ */

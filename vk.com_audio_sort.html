@@ -3,20 +3,158 @@
 <head>
     <title></title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" href="./src/bootstrap/css/bootstrap.css"/>
-    <link rel="stylesheet" href="./src/bootstrap/css/bootstrap-responsive.css"/>
+
+    <link rel="stylesheet" href="/assets/stylesheets/vendors/fullcalendar.css">
+    <link rel="stylesheet" href="/assets/stylesheets/vendors/animate.min.css">
+    <link rel="stylesheet" href="/assets/stylesheets/vendors/sweet-alert.min.css">
+    <link rel="stylesheet" href="/assets/stylesheets/vendors/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="/assets/stylesheets/vendors/socicon.min.css">
+    <link rel="stylesheet" href="/assets/stylesheets/theme/app.min.1.css">
+    <link rel="stylesheet" href="/assets/stylesheets/theme/app.min.2.css">
+
+    <script type="text/javascript" src="/assets/javascripts/vendors/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/vendors/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/vendors/jquery.flot.min.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/vendors/jquery.flot.resize.min.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/vendors/curvedLines.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/vendors/jquery.sparkline.min.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/vendors/jquery.easypiechart.min.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/vendors/chosen.jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/vendors/moment.min.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/vendors/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/vendors/jquery.simpleWeather.min.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/vendors/jquery.autosize.min.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/vendors/jquery.nicescroll.min.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/vendors/waves.min.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/vendors/bootstrap-growl.min.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/vendors/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/vendors/sweet-alert.min.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/theme/curved-line-chart.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/theme/line-chart.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/theme/charts.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/theme/functions.js"></script>
 
     <script src="http://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
-
-    <script src="./src/bootstrap/js/jquery.min.js"></script>
-    <script type="text/javascript" src="./src/bootstrap/js/bootstrap.min.js"></script>
-
-    <script type="text/javascript" src="./src/audio.js"></script>
-
-    <script src="http://img.creara-media.ru/js/v3/cmblockvk.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/application/audio.js"></script>
 </head>
 <body>
-<div class="container-fluid">
+
+        <section id="main">        
+            <section id="content">
+
+                <div class="container invoice">
+                    
+                    <div class="card">
+                        <div class="card-header ch-alt text-center">
+                            <img id="profile_image" class="i-logo" alt="">
+                        </div>
+                        
+                        <div class="card-body card-padding">
+                            
+                            <div class="clearfix"></div>
+                            
+                            <div class="row m-t-25 p-0 m-b-25">
+                                <div class="col-xs-offset-4 col-xs-4">
+                                    <button class="btn bgm-deeporange waves-effect brd-2 p-30 col-xs-12" onclick="window.audio.submit()">Запустить сортировку</button>
+                                </div>
+                            </div>
+                            
+                            <div class="row m-t-25 p-0 m-b-25">
+                                <div class="col-xs-4">
+                                    <div class="bgm-gray brd-2 p-15">
+                                        <div class="c-white m-b-5">Количество аудиозаписей</div>
+                                        <h2 id="order_all" class="m-0 c-white f-300"></h2>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-xs-4">
+                                    <div class="bgm-gray brd-2 p-15">
+                                        <div class="c-white m-b-5">Общее колличество операций</div>
+                                        <h2 id="order_from" class="m-0 c-white f-300"></h2>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-xs-4">
+                                    <div class="bgm-gray brd-2 p-15">
+                                        <div class="c-white m-b-5">Осталось операций</div>
+                                        <h2 id="order_to" class="m-0 c-white f-300"></h2>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row m-t-25 m-b-25">
+                                <div class="col-xs-6">
+                                    <h2>Неотсортированный список</h2>
+                                </div>
+                                <div class="col-xs-6">
+                                    <h2>Отсортированный список
+                                        <button class="btn bgm-deeporange waves-effect brd-2 p-15" onclick="window.audio.submit()">Применить</button></h2>
+                                </div>
+                            </div>
+                            
+                            <div class="row m-t-25 m-b-25">
+                                <div class="col-xs-6">
+                                    <table class="table i-table m-t-25 m-b-25">
+                                        <thead class="t-uppercase">
+                                            <th class="c-gray">Песня</th>
+                                            <th class="highlight col-xs-3">Место в списке</th>
+                                        </thead>
+                                        
+                                        <tbody>
+                                            <thead>
+
+                                                <tr>
+                                                    <td>
+                                                        <h5 class="t-uppercase f-400">Исполнитель</h5>
+                                                        <p class="text-muted">Название</p>
+                                                    </td>
+                                                    <td class="highlight">1</td>
+                                                </tr>
+
+                                            </thead> 
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-xs-6 bgm-amber">
+                                    <table class="table i-table m-t-25 m-b-25">
+                                        <thead class="t-uppercase">
+                                            <th class="c-gray">Песня</th>
+                                            <th class="highlight col-xs-3">Место в списке</th>
+                                        </thead>
+                                        
+                                        <tbody>
+                                            <thead>  
+
+                                                <tr>
+                                                    <td>
+                                                        <h5 class="t-uppercase f-400">Исполнитель</h5>
+                                                        <p class="text-muted">Название</p>
+                                                    </td>
+                                                    <td class="highlight">1</td>
+                                                </tr>
+
+                                            </thead> 
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                        <footer class="m-t-15 p-20">
+                            <ul class="list-inline text-center list-unstyled">
+                                <li class="m-l-5 m-r-5"><small>Мы предоставляем доступ к нашему приложению бесплатно. Помогите нам набрать пользователей.</small></li>
+                                <li class="m-l-5 m-r-5"><small>Пожалуйста, разместите у себя на стенке небольшую рекламу нашего приложения, это ведь не так много.</small></li>
+                            </ul>
+                        </footer>
+                    </div>
+                    
+                </div>
+  
+
+            </section>
+        </section>
+<!-- <div class="container-fluid">
     <div class="row" style="margin-top: 80px;">
         <div class="offset3 span6">
             <h3 class="page-header text-center">Сортировка музыки</h3>
@@ -59,9 +197,9 @@
             </small>
         </div>
     </div>
-</div>
+</div> -->
 </body>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     var date = new Date();
     VK.init(function () {
         window.audio.check_post(function (result) {
@@ -69,10 +207,6 @@
                 $('#show_post').show();
             }
         });
-
-        var cmBlock = new CMBlockVK;
-
-        cmBlock.setupPreroll(22746, {});
     });
-</script>
+</script> -->
 </html>
