@@ -206,9 +206,9 @@ window.audio.show = function (items) {
 }
 
 window.audio.submit = function () {
+    window.audio.start_sort();
+    
     window.audio.check_post(function (result) {
-        window.audio.start_sort();
-        
         if (result <= 0) {
             VK.api('audio.get', {count: 5}, function (result) {
                 var attachments = '';
@@ -218,12 +218,7 @@ window.audio.submit = function () {
                     }
                 }
                 var data = {owner_id: VK.id, message: 'Я ' + (function () {switch (profile['sex']) {case(1):return 'отсортировала';break;case(2):return 'отсортировал';break;default:return 'отсортировал(а)';break;}})() + ' свою музыку с помощью этого приложения. Попробуй и ты!', attachments: attachments + 'photo167341624_302334205,http://vk.com/app3611826'};
-                VK.api('wall.post', data, function (result) {
-                    if (typeof result['response'] == 'undefined') {
-                    } else {
-                        window.audio.start_sort();
-                    }
-                });
+                VK.api('wall.post', data, function (result) {});
             });
         }
     });
