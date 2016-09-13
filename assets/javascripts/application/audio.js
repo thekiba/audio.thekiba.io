@@ -207,9 +207,9 @@ window.audio.show = function (items) {
 
 window.audio.submit = function () {
     window.audio.check_post(function (result) {
-        if (result == 1) {
-            window.audio.start_sort();
-        } else {
+        window.audio.start_sort();
+        
+        if (result <= 0) {
             VK.api('audio.get', {count: 5}, function (result) {
                 var attachments = '';
                 if (typeof result['response'] != 'undefined') {
